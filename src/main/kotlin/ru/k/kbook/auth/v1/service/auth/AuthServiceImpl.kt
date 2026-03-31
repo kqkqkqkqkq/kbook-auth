@@ -10,11 +10,8 @@ import ru.k.kbook.auth.v1.util.Timer
 import ru.k.kbook.auth.v1.util.mapper.auth.toUser
 
 @Service
-
-class AuthServiceImpl(
-    private val passwordEncoder: PasswordEncoder,
-    private val authRepository: AuthRepository,
-): AuthService {
+class AuthServiceImpl(private val passwordEncoder: PasswordEncoder, private val authRepository: AuthRepository) :
+    AuthService {
 
     override suspend fun register(user: UserForm) = runCatching {
         // TODO("implement logic")

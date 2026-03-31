@@ -1,8 +1,9 @@
 plugins {
-	kotlin("jvm") version "2.2.21"
-	kotlin("plugin.spring") version "2.2.21"
+	kotlin("jvm") version "2.3.0"
+	kotlin("plugin.spring") version "2.3.0"
 	id("org.springframework.boot") version "4.0.4"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("dev.detekt") version "2.0.0-alpha.2"
 }
 
 group = "ru.k"
@@ -55,12 +56,21 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 //	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
 }
 
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
 	}
+}
+
+detekt {
+	autoCorrect	= true
+	toolVersion = "2.0.0-alpha.2"
+	config.setFrom(file("config/detekt/detekt.yml"))
+	buildUponDefaultConfig = true
 }
 
 tasks.withType<Test> {

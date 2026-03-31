@@ -1,10 +1,9 @@
 package ru.k.kbook.auth.v1.repository.auth.entity
 
-import java.time.LocalDate
-
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDate
 
 @Table(name = "users")
 data class UserDbo(
