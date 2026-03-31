@@ -2,7 +2,7 @@ package ru.k.kbook.auth.v1.service.auth.model
 
 import kotlinx.datetime.LocalDate
 
-data class UserForm(
+data class RegisterForm(
     val firstName: String?,
     val lastName: String?,
     val email: String,

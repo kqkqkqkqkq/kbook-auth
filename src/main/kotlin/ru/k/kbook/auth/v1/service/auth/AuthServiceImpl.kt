@@ -5,7 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import ru.k.kbook.auth.v1.repository.auth.AuthRepository
 import ru.k.kbook.auth.v1.repository.auth.entity.UserDbo
-import ru.k.kbook.auth.v1.service.auth.model.UserForm
+import ru.k.kbook.auth.v1.service.auth.model.LoginForm
+import ru.k.kbook.auth.v1.service.auth.model.RegisterForm
 import ru.k.kbook.auth.v1.util.Timer
 import ru.k.kbook.auth.v1.util.mapper.auth.toUser
 
@@ -13,9 +14,7 @@ import ru.k.kbook.auth.v1.util.mapper.auth.toUser
 class AuthServiceImpl(private val passwordEncoder: PasswordEncoder, private val authRepository: AuthRepository) :
     AuthService {
 
-    override suspend fun register(user: UserForm) = runCatching {
-        // TODO("implement logic")
-
+    override suspend fun register(user: RegisterForm) = runCatching {
         val currentDate = Timer.now().date
         val passwordHash = passwordEncoder.encode(user.password)
 
@@ -33,5 +32,14 @@ class AuthServiceImpl(private val passwordEncoder: PasswordEncoder, private val 
             dateOfBirth = user.dateOfBirth?.toJavaLocalDate(),
         )
         authRepository.save(userDbo).toUser()
+    }
+
+    override suspend fun login(user: LoginForm) = runCatching {
+        val dbUser = authRepository.findByEmail(user.email)
+
+        if (dbUser != null && !passwordEncoder.matches(user.password, dbUser.passwordHash)) {
+            throw IllegalStateException("Wrong password!")
+        }
+        dbUser?.toUser()
     }
 }
